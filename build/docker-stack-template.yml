@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  web:
+    image: 127.0.0.1/kasirga_nginx_fpm:1.0.2-29.KAS-138
+    environment:
+      - "TZ=Europe/Moscow"
+      - "ERRORS=0"
+    depends_on:
+      - worker_master
+    extra_hosts:
+      - mongo:127.0.0.1
+    dns:
+     - 8.8.8.8
+    deploy:
+      placement:
+        constraints : [node.role == manager]
+      replicas: 1
+    ports:
+      - "8080:80"
+    hostname: liftnec
+    volumes:
+     - /hosthome/niyazi/workspace/liftnec/:/app/
+#     - /hosthome/niyazi/workspace/liftnec/modules/:/app/modules/
+#     - /hosthome/niyazi/workspace/liftnec/static/:/app/static/
+#     - /hosthome/niyazi/workspace/liftnec/templates/:/app/templates/
+#     - /hosthome/niyazi/workspace/liftnec/admin_route/:/app/admin_route/

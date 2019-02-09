@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+echo "sudo password"
+echo ""
+base=https://github.com/docker/machine/releases/download/v0.14.0;
+sudo curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/usr/local/bin/docker-machine;
+sudo chmod +x /usr/local/bin/docker-machine;
+docker-machine create --driver virtualbox --virtualbox-memory "2048" --virtualbox-disk-size "8000" dd1;
+
+docker-machine ssh dd1
+mkdir -p /opt/registry
+sudo mkdir /opt/registry/config/ -p
+sudo cp /hosthome/niyazi/workspace/liftnec/build/opt/registry.env /opt/registry/config/
+docker run -d --name registry -v /opt/registry:/opt/registry -p 443:5000 --restart always --env-file /opt/registry/config/registry.env registry:2
+
+
+cp /hosthome/niyazi/workspace/liftnec/
+docker build . -f Dockerfile.base -t lift
+docker build . -f Dockerfile -t liftnec
+docker stack deploy -c docker-stack.yml lift
+
+

@@ -1,0 +1,6 @@
+docker-stack.yml
+env/
+venv/
+uwsgi.ini
+.idea/
+*__pycache__*
